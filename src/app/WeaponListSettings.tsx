@@ -25,6 +25,7 @@ import {
   maxRegularUpgradeLevel,
   toSpecialUpgradeLevel,
 } from "./uiUtils.ts";
+import { weightedBossPresets, type WeightedBossPresetId } from "./weightedBossPresets.ts";
 
 interface AttributeInputProps {
   attribute: Attribute;
@@ -123,6 +124,7 @@ interface Props {
   freeStatPointsMax: number;
   optimizeMode: OptimizeMode;
   optimizeAttackPowerType: AttackPowerType;
+  weightedBossPresetId: WeightedBossPresetId;
   optimizationWeights: OptimizationWeights;
   spellScalingWeight: number;
   showOptimizedAttributes: boolean;
@@ -136,6 +138,7 @@ interface Props {
   onFreeStatPointsChanged(value: number): void;
   onOptimizeModeChanged(mode: OptimizeMode): void;
   onOptimizeAttackPowerTypeChanged(attackPowerType: AttackPowerType): void;
+  onWeightedBossPresetIdChanged(presetId: WeightedBossPresetId): void;
   onOptimizationWeightChanged(attackPowerType: AttackPowerType, weight: number): void;
   onSpellScalingWeightChanged(weight: number): void;
   onShowOptimizedAttributesChanged(value: boolean): void;
@@ -156,6 +159,7 @@ function WeaponListSettings({
   freeStatPointsMax,
   optimizeMode,
   optimizeAttackPowerType,
+  weightedBossPresetId,
   optimizationWeights,
   spellScalingWeight,
   showOptimizedAttributes,
@@ -169,6 +173,7 @@ function WeaponListSettings({
   onFreeStatPointsChanged,
   onOptimizeModeChanged,
   onOptimizeAttackPowerTypeChanged,
+  onWeightedBossPresetIdChanged,
   onOptimizationWeightChanged,
   onSpellScalingWeightChanged,
   onShowOptimizedAttributesChanged,
@@ -181,6 +186,7 @@ function WeaponListSettings({
   const showSpecificAttackPower = optimizeMode === "specificAttackPower";
   const showStatusBuildup = optimizeMode === "statusBuildup";
   const showWeights = optimizeMode === "weighted";
+  const showBossPresets = optimizeMode === "weighted";
 
   return (
     <Box
@@ -287,30 +293,52 @@ function WeaponListSettings({
               <MenuItem value="specificAttackPower">Specific Attack Power</MenuItem>
               <MenuItem value="statusBuildup">Status Buildup</MenuItem>
               <MenuItem value="spellScaling">Spell Scaling</MenuItem>
-              <MenuItem value="weighted">Weighted</MenuItem>
+              <MenuItem value="weighted">Weighted/Bosses</MenuItem>
             </Select>
           </FormControl>
 
-          <FormControl
-            fullWidth
-            size="small"
-            disabled={!showSpecificAttackPower && !showStatusBuildup}
-            sx={{ gridColumn: { xs: "1 / -1", sm: "auto" } }}
-          >
-            <InputLabel id="optimizationTypeLabel">Type</InputLabel>
-            <Select
-              labelId="optimizationTypeLabel"
-              label="Type"
-              value={optimizeAttackPowerType}
-              onChange={(evt) => onOptimizeAttackPowerTypeChanged(+evt.target.value as AttackPowerType)}
+          {showBossPresets ? (
+            <FormControl fullWidth size="small" sx={{ gridColumn: { xs: "1 / -1", sm: "auto" } }}>
+              <InputLabel id="optimizationTypeLabel">Type</InputLabel>
+              <Select
+                labelId="optimizationTypeLabel"
+                label="Type"
+                value={weightedBossPresetId}
+                onChange={(evt) =>
+                  onWeightedBossPresetIdChanged(evt.target.value as WeightedBossPresetId)
+                }
+              >
+                {weightedBossPresets.map((preset) => (
+                  <MenuItem key={preset.id} value={preset.id}>
+                    {preset.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          ) : (
+            <FormControl
+              fullWidth
+              size="small"
+              disabled={!showSpecificAttackPower && !showStatusBuildup}
+              sx={{ gridColumn: { xs: "1 / -1", sm: "auto" } }}
             >
-              {(showSpecificAttackPower ? allDamageTypes : allStatusTypes).map((type) => (
-                <MenuItem key={type} value={type}>
-                  {damageTypeLabels.get(type) ?? `Type ${type}`}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+              <InputLabel id="optimizationTypeLabel">Type</InputLabel>
+              <Select
+                labelId="optimizationTypeLabel"
+                label="Type"
+                value={optimizeAttackPowerType}
+                onChange={(evt) =>
+                  onOptimizeAttackPowerTypeChanged(+evt.target.value as AttackPowerType)
+                }
+              >
+                {(showSpecificAttackPower ? allDamageTypes : allStatusTypes).map((type) => (
+                  <MenuItem key={type} value={type}>
+                    {damageTypeLabels.get(type) ?? `Type ${type}`}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          )}
         </Box>
 
         {showWeights && (

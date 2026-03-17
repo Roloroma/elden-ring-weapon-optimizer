@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Backdrop, Box, CircularProgress, Typography } from "@mui/material";
 import { AttackPowerType } from "../calculator/calculator.ts";
 import type { OptimizeMode } from "../calculator/optimization.ts";
+import type { WeightedBossPresetId } from "./weightedBossPresets.ts";
 
 function usePopupImagesByKey() {
   return useMemo(() => {
@@ -20,8 +21,16 @@ function usePopupImagesByKey() {
   }, []);
 }
 
-function pickRuneKey(optimizeMode: OptimizeMode, optimizeAttackPowerType: AttackPowerType): string {
-  if (optimizeMode === "totalAttackPower" || optimizeMode === "weighted") {
+function pickRuneKey(
+  optimizeMode: OptimizeMode,
+  optimizeAttackPowerType: AttackPowerType,
+  weightedBossPresetId: WeightedBossPresetId,
+): string {
+  if (optimizeMode === "weighted") {
+    return weightedBossPresetId === "custom" ? "godrick" : weightedBossPresetId;
+  }
+
+  if (optimizeMode === "totalAttackPower") {
     return "godrick";
   }
 
@@ -73,13 +82,15 @@ export default function OptimizationPopup({
   open,
   optimizeMode,
   optimizeAttackPowerType,
+  weightedBossPresetId,
 }: {
   open: boolean;
   optimizeMode: OptimizeMode;
   optimizeAttackPowerType: AttackPowerType;
+  weightedBossPresetId: WeightedBossPresetId;
 }) {
   const imagesByKey = usePopupImagesByKey();
-  const runeKey = pickRuneKey(optimizeMode, optimizeAttackPowerType);
+  const runeKey = pickRuneKey(optimizeMode, optimizeAttackPowerType, weightedBossPresetId);
   const runeSrc = imagesByKey[runeKey];
 
   return (

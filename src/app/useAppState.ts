@@ -13,6 +13,11 @@ import type { RegulationVersionName } from "./regulationVersions.tsx";
 import regulationVersions from "./regulationVersions.tsx";
 import { dlcWeaponTypes } from "./uiUtils.ts";
 import { type WeaponOption } from "./WeaponPicker.tsx";
+import {
+  getWeightedBossPreset,
+  isWeightedBossPresetId,
+  type WeightedBossPresetId,
+} from "./weightedBossPresets.ts";
 
 interface AppState {
   readonly regulationVersionName: RegulationVersionName;
@@ -20,6 +25,7 @@ interface AppState {
   readonly freeStatPoints: number;
   readonly optimizeMode: OptimizeMode;
   readonly optimizeAttackPowerType: AttackPowerType;
+  readonly weightedBossPresetId: WeightedBossPresetId;
   readonly optimizationWeights: OptimizationWeights;
   readonly spellScalingWeight: number;
   readonly showOptimizedAttributes: boolean;
@@ -43,6 +49,7 @@ interface UpdateAppState extends AppState {
   setFreeStatPoints(value: number): void;
   setOptimizeMode(mode: OptimizeMode): void;
   setOptimizeAttackPowerType(attackPowerType: AttackPowerType): void;
+  setWeightedBossPresetId(presetId: WeightedBossPresetId): void;
   setOptimizationWeight(attackPowerType: AttackPowerType, weight: number): void;
   setSpellScalingWeight(weight: number): void;
   setShowOptimizedAttributes(value: boolean): void;
@@ -87,6 +94,7 @@ const defaultAppState: AppState = {
   freeStatPoints: 0,
   optimizeMode: "totalAttackPower",
   optimizeAttackPowerType: AttackPowerType.PHYSICAL,
+  weightedBossPresetId: "custom",
   optimizationWeights: defaultWeights(),
   spellScalingWeight: 1,
   showOptimizedAttributes: false,
@@ -170,6 +178,15 @@ function getInitialAppState() {
   const regulationVersionName = withoutBase;
   if (regulationVersionName && regulationVersionName in regulationVersions) {
     appState.regulationVersionName = regulationVersionName as RegulationVersionName;
+  }
+
+  // If a stored preset id is invalid (e.g. presets changed), fall back to custom.
+  if (
+    !isWeightedBossPresetId(
+      (appState as unknown as { weightedBossPresetId?: unknown }).weightedBossPresetId,
+    )
+  ) {
+    (appState as unknown as { weightedBossPresetId: WeightedBossPresetId }).weightedBossPresetId = "custom";
   }
 
   return appState;
@@ -256,14 +273,34 @@ export default function useAppState() {
       setOptimizeAttackPowerType(optimizeAttackPowerType) {
         setAppState((prevAppState) => ({ ...prevAppState, optimizeAttackPowerType }));
       },
+      setWeightedBossPresetId(weightedBossPresetId) {
+        setAppState((prevAppState) => {
+          if (weightedBossPresetId === "custom") {
+            return { ...prevAppState, weightedBossPresetId };
+          }
+
+          const preset = getWeightedBossPreset(weightedBossPresetId);
+          return {
+            ...prevAppState,
+            weightedBossPresetId,
+            optimizationWeights: { ...prevAppState.optimizationWeights, ...preset.weights },
+            spellScalingWeight: preset.spellScalingWeight,
+          };
+        });
+      },
       setOptimizationWeight(attackPowerType, weight) {
         setAppState((prevAppState) => ({
           ...prevAppState,
+          weightedBossPresetId: "custom",
           optimizationWeights: { ...prevAppState.optimizationWeights, [attackPowerType]: weight },
         }));
       },
       setSpellScalingWeight(spellScalingWeight) {
-        setAppState((prevAppState) => ({ ...prevAppState, spellScalingWeight }));
+        setAppState((prevAppState) => ({
+          ...prevAppState,
+          weightedBossPresetId: "custom",
+          spellScalingWeight,
+        }));
       },
       setShowOptimizedAttributes(showOptimizedAttributes) {
         setAppState((prevAppState) => ({ ...prevAppState, showOptimizedAttributes }));

@@ -109,6 +109,7 @@ export default function App() {
     freeStatPoints,
     optimizeMode,
     optimizeAttackPowerType,
+    weightedBossPresetId,
     optimizationWeights,
     spellScalingWeight,
     showOptimizedAttributes,
@@ -129,6 +130,7 @@ export default function App() {
     setFreeStatPoints,
     setOptimizeMode,
     setOptimizeAttackPowerType,
+    setWeightedBossPresetId,
     setOptimizationWeight,
     setSpellScalingWeight,
     setShowOptimizedAttributes,
@@ -300,6 +302,7 @@ export default function App() {
         open={optimizing}
         optimizeMode={optimizeMode}
         optimizeAttackPowerType={optimizeAttackPowerType}
+        weightedBossPresetId={weightedBossPresetId}
       />
 
       <AppBar
@@ -379,6 +382,7 @@ export default function App() {
             freeStatPointsMax={freeStatPointsMax}
             optimizeMode={optimizeMode}
             optimizeAttackPowerType={optimizeAttackPowerType}
+            weightedBossPresetId={weightedBossPresetId}
             optimizationWeights={optimizationWeights}
             spellScalingWeight={spellScalingWeight}
             showOptimizedAttributes={showOptimizedAttributes}
@@ -392,6 +396,7 @@ export default function App() {
             onFreeStatPointsChanged={setFreeStatPoints}
             onOptimizeModeChanged={setOptimizeMode}
             onOptimizeAttackPowerTypeChanged={setOptimizeAttackPowerType}
+            onWeightedBossPresetIdChanged={setWeightedBossPresetId}
             onOptimizationWeightChanged={setOptimizationWeight}
             onSpellScalingWeightChanged={setSpellScalingWeight}
             onShowOptimizedAttributesChanged={setShowOptimizedAttributes}
