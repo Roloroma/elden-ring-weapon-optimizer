@@ -70,7 +70,7 @@ export const weightedBossPresets: readonly WeightedBossPreset[] = [
       madness: 0,
       deathBlight: 0,
     }),
-    spellScalingWeight: 0.8,
+    spellScalingWeight: 0,
   },
   {
     id: "radahn",
@@ -89,7 +89,7 @@ export const weightedBossPresets: readonly WeightedBossPreset[] = [
       madness: 0,
       deathBlight: 0,
     }),
-    spellScalingWeight: 0.8,
+    spellScalingWeight: 0,
   },
   {
     id: "renalla",
@@ -108,7 +108,7 @@ export const weightedBossPresets: readonly WeightedBossPreset[] = [
       madness: 0,
       deathBlight: 0,
     }),
-    spellScalingWeight: 0.2,
+    spellScalingWeight: 0,
   },
   {
     id: "rykard",
@@ -127,7 +127,7 @@ export const weightedBossPresets: readonly WeightedBossPreset[] = [
       madness: 0,
       deathBlight: 0,
     }),
-    spellScalingWeight: 0.6,
+    spellScalingWeight: 0,
   },
   {
     id: "morgott",
@@ -146,7 +146,7 @@ export const weightedBossPresets: readonly WeightedBossPreset[] = [
       madness: 0,
       deathBlight: 0,
     }),
-    spellScalingWeight: 1.0,
+    spellScalingWeight: 0,
   },
   {
     id: "mohg",
@@ -165,7 +165,7 @@ export const weightedBossPresets: readonly WeightedBossPreset[] = [
       madness: 0,
       deathBlight: 0,
     }),
-    spellScalingWeight: 0.6,
+    spellScalingWeight: 0,
   },
   {
     id: "malenia",
@@ -184,7 +184,7 @@ export const weightedBossPresets: readonly WeightedBossPreset[] = [
       madness: 0,
       deathBlight: 0,
     }),
-    spellScalingWeight: 0.8,
+    spellScalingWeight: 0,
   },
 ] as const;
 
@@ -197,4 +197,3 @@ export function isWeightedBossPresetId(value: unknown): value is WeightedBossPre
 export function getWeightedBossPreset(id: WeightedBossPresetId): WeightedBossPreset {
   return weightedBossPresets.find((p) => p.id === id) ?? weightedBossPresets[0];
 }
-
