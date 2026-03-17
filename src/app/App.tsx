@@ -112,6 +112,7 @@ export default function App() {
     weightedBossPresetId,
     optimizationWeights,
     spellScalingWeight,
+    showWeightedAttackPower,
     showOptimizedAttributes,
     includeDLC,
     effectiveOnly,
@@ -133,6 +134,7 @@ export default function App() {
     setWeightedBossPresetId,
     setOptimizationWeight,
     setSpellScalingWeight,
+    setShowWeightedAttackPower,
     setShowOptimizedAttributes,
     setIncludeDLC,
     setEffectiveOnly,
@@ -179,6 +181,7 @@ export default function App() {
     optimizeAttackPowerType,
     optimizationWeights,
     spellScalingWeight,
+    showWeightedAttackPower,
     showOptimizedAttributes,
     includeDLC,
     effectiveOnly,
@@ -233,7 +236,7 @@ export default function App() {
         footer={tableFooter}
         sortBy={sortBy}
         reverse={reverse}
-        weightedDisplay={optimizeMode === "weighted"}
+        weightedDisplay={optimizeMode === "weighted" && showWeightedAttackPower}
         splitDamage={splitDamage}
         splitSpellScaling={!!regulationVersion.splitSpellScaling}
         numericalScaling={numericalScaling}
@@ -386,6 +389,7 @@ export default function App() {
             weightedBossPresetId={weightedBossPresetId}
             optimizationWeights={optimizationWeights}
             spellScalingWeight={spellScalingWeight}
+            showWeightedAttackPower={showWeightedAttackPower}
             showOptimizedAttributes={showOptimizedAttributes}
             twoHanding={twoHanding}
             upgradeLevel={upgradeLevel}
@@ -400,6 +404,7 @@ export default function App() {
             onWeightedBossPresetIdChanged={setWeightedBossPresetId}
             onOptimizationWeightChanged={setOptimizationWeight}
             onSpellScalingWeightChanged={setSpellScalingWeight}
+            onShowWeightedAttackPowerChanged={setShowWeightedAttackPower}
             onShowOptimizedAttributesChanged={setShowOptimizedAttributes}
             onTwoHandingChanged={setTwoHanding}
             onUpgradeLevelChanged={setUpgradeLevel}

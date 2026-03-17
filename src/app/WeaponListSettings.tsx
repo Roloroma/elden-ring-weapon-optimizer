@@ -127,6 +127,7 @@ interface Props {
   weightedBossPresetId: WeightedBossPresetId;
   optimizationWeights: OptimizationWeights;
   spellScalingWeight: number;
+  showWeightedAttackPower: boolean;
   showOptimizedAttributes: boolean;
   twoHanding: boolean;
   upgradeLevel: number;
@@ -141,6 +142,7 @@ interface Props {
   onWeightedBossPresetIdChanged(presetId: WeightedBossPresetId): void;
   onOptimizationWeightChanged(attackPowerType: AttackPowerType, weight: number): void;
   onSpellScalingWeightChanged(weight: number): void;
+  onShowWeightedAttackPowerChanged(value: boolean): void;
   onShowOptimizedAttributesChanged(value: boolean): void;
   onTwoHandingChanged(twoHanding: boolean): void;
   onUpgradeLevelChanged(upgradeLevel: number): void;
@@ -162,6 +164,7 @@ function WeaponListSettings({
   weightedBossPresetId,
   optimizationWeights,
   spellScalingWeight,
+  showWeightedAttackPower,
   showOptimizedAttributes,
   twoHanding,
   upgradeLevel,
@@ -176,6 +179,7 @@ function WeaponListSettings({
   onWeightedBossPresetIdChanged,
   onOptimizationWeightChanged,
   onSpellScalingWeightChanged,
+  onShowWeightedAttackPowerChanged,
   onShowOptimizedAttributesChanged,
   onTwoHandingChanged,
   onUpgradeLevelChanged,
@@ -187,6 +191,7 @@ function WeaponListSettings({
   const showStatusBuildup = optimizeMode === "statusBuildup";
   const showWeights = optimizeMode === "weighted";
   const showBossPresets = optimizeMode === "weighted";
+  const weightedAccentColor = "rgb(245, 189, 99)";
 
   return (
     <Box
@@ -346,6 +351,18 @@ function WeaponListSettings({
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
               Weights
             </Typography>
+
+            <FormControlLabel
+              sx={{ mb: 1, color: weightedAccentColor }}
+              label="Show weighted Attack Power"
+              control={
+                <Checkbox
+                  size="small"
+                  checked={showWeightedAttackPower}
+                  onChange={(evt) => onShowWeightedAttackPowerChanged(evt.currentTarget.checked)}
+                />
+              }
+            />
 
             <Box
               sx={{

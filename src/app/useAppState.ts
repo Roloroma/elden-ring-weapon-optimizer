@@ -28,6 +28,7 @@ interface AppState {
   readonly weightedBossPresetId: WeightedBossPresetId;
   readonly optimizationWeights: OptimizationWeights;
   readonly spellScalingWeight: number;
+  readonly showWeightedAttackPower: boolean;
   readonly showOptimizedAttributes: boolean;
   readonly twoHanding: boolean;
   readonly upgradeLevel: number;
@@ -52,6 +53,7 @@ interface UpdateAppState extends AppState {
   setWeightedBossPresetId(presetId: WeightedBossPresetId): void;
   setOptimizationWeight(attackPowerType: AttackPowerType, weight: number): void;
   setSpellScalingWeight(weight: number): void;
+  setShowWeightedAttackPower(value: boolean): void;
   setShowOptimizedAttributes(value: boolean): void;
   setTwoHanding(twoHanding: boolean): void;
   setUpgradeLevel(upgradeLevel: number): void;
@@ -96,7 +98,8 @@ const defaultAppState: AppState = {
   optimizeAttackPowerType: AttackPowerType.PHYSICAL,
   weightedBossPresetId: "custom",
   optimizationWeights: defaultWeights(),
-  spellScalingWeight: 1,
+  spellScalingWeight: 1000,
+  showWeightedAttackPower: true,
   showOptimizedAttributes: false,
   twoHanding: false,
   upgradeLevel: 25,
@@ -301,6 +304,9 @@ export default function useAppState() {
           weightedBossPresetId: "custom",
           spellScalingWeight,
         }));
+      },
+      setShowWeightedAttackPower(showWeightedAttackPower) {
+        setAppState((prevAppState) => ({ ...prevAppState, showWeightedAttackPower }));
       },
       setShowOptimizedAttributes(showOptimizedAttributes) {
         setAppState((prevAppState) => ({ ...prevAppState, showOptimizedAttributes }));

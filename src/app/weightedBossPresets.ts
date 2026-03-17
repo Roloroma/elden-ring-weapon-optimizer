@@ -52,7 +52,7 @@ export const weightedBossPresets: readonly WeightedBossPreset[] = [
     id: "custom",
     label: "Custom",
     weights: {},
-    spellScalingWeight: 1,
+    spellScalingWeight: 1000,
   },
   {
     id: "default",
@@ -71,7 +71,7 @@ export const weightedBossPresets: readonly WeightedBossPreset[] = [
       madness: 0,
       deathBlight: 0,
     }),
-    spellScalingWeight: 0,
+    spellScalingWeight: 1000,
   },
   {
     id: "godrick",

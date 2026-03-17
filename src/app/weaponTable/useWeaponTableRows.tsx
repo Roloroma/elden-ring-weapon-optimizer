@@ -36,6 +36,7 @@ interface WeaponTableRowsOptions {
   optimizeAttackPowerType: AttackPowerType;
   optimizationWeights: OptimizationWeights;
   spellScalingWeight: number;
+  showWeightedAttackPower: boolean;
   showOptimizedAttributes: boolean;
   includeDLC: boolean;
   effectiveOnly: boolean;
@@ -69,13 +70,14 @@ function applyDisplayWeights({
   attackResult,
   optimizeMode,
   optimizationWeights,
+  showWeightedAttackPower,
 }: {
   attackResult: ReturnType<typeof getWeaponAttack>;
   optimizeMode: OptimizeMode;
   optimizationWeights: OptimizationWeights;
-  spellScalingWeight: number;
+  showWeightedAttackPower: boolean;
 }) {
-  if (optimizeMode !== "weighted") {
+  if (optimizeMode !== "weighted" || !showWeightedAttackPower) {
     return attackResult;
   }
 
@@ -85,15 +87,12 @@ function applyDisplayWeights({
     weightedAttackPower[type] = (weightedAttackPower[type] ?? 0) * weight;
   }
 
-  const weightedSpellScaling = { ...attackResult.spellScaling };
-  for (const [typeStr, value] of Object.entries(weightedSpellScaling)) {
-    weightedSpellScaling[+typeStr as AttackPowerType] = value * spellScalingWeight;
-  }
-
   return {
     ...attackResult,
     attackPower: weightedAttackPower,
-    spellScaling: weightedSpellScaling,
+    // Spell scaling is intentionally not weighted for display/sorting (it isn't directly comparable
+    // to melee attack power). Weighting still applies to optimization scoring.
+    spellScaling: attackResult.spellScaling,
   };
 }
 
@@ -126,6 +125,7 @@ const useWeaponTableRows = ({
   const optimizeAttackPowerType = useDeferredValue(options.optimizeAttackPowerType);
   const optimizationWeights = useDeferredValue(options.optimizationWeights);
   const spellScalingWeight = useDeferredValue(options.spellScalingWeight);
+  const showWeightedAttackPower = useDeferredValue(options.showWeightedAttackPower);
   // Note: showOptimizedAttributes only controls UI columns. We always compute/store optimized
   // attributes when optimizing so toggling the checkbox does not trigger a full recomputation.
   // (The optimization results are the same either way.)
@@ -224,7 +224,7 @@ const useWeaponTableRows = ({
           attackResult: baseAttackResult,
           optimizeMode,
           optimizationWeights,
-          spellScalingWeight,
+          showWeightedAttackPower,
         });
 
         let optimizedAttributes: Attributes | undefined;
@@ -249,7 +249,7 @@ const useWeaponTableRows = ({
             attackResult: optimizedAttackResult,
             optimizeMode,
             optimizationWeights,
-            spellScalingWeight,
+            showWeightedAttackPower,
           });
           optimizedAttributes = optimized.optimizedAttributes;
         }
@@ -303,6 +303,7 @@ const useWeaponTableRows = ({
     optimizeAttackPowerType,
     optimizationWeights,
     spellScalingWeight,
+    showWeightedAttackPower,
   ]);
 
   const rowGroups = useMemo<WeaponTableRowGroup[]>(() => {
