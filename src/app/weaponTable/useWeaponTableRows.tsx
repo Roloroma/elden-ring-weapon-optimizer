@@ -1,6 +1,7 @@
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import getWeaponAttack, {
   allAttackPowerTypes,
+  allDamageTypes,
   AttackPowerType,
   WeaponType,
   type Attributes,
@@ -63,6 +64,39 @@ interface WeaponTableRowsResult {
 }
 
 const yieldToBrowser = () => new Promise<void>((resolve) => setTimeout(resolve, 0));
+
+function applyDisplayWeights({
+  attackResult,
+  optimizeMode,
+  optimizationWeights,
+  spellScalingWeight,
+}: {
+  attackResult: ReturnType<typeof getWeaponAttack>;
+  optimizeMode: OptimizeMode;
+  optimizationWeights: OptimizationWeights;
+  spellScalingWeight: number;
+}) {
+  if (optimizeMode !== "weighted") {
+    return attackResult;
+  }
+
+  const weightedAttackPower = { ...attackResult.attackPower };
+  for (const type of allDamageTypes) {
+    const weight = optimizationWeights[type] ?? 1;
+    weightedAttackPower[type] = (weightedAttackPower[type] ?? 0) * weight;
+  }
+
+  const weightedSpellScaling = { ...attackResult.spellScaling };
+  for (const [typeStr, value] of Object.entries(weightedSpellScaling)) {
+    weightedSpellScaling[+typeStr as AttackPowerType] = value * spellScalingWeight;
+  }
+
+  return {
+    ...attackResult,
+    attackPower: weightedAttackPower,
+    spellScaling: weightedSpellScaling,
+  };
+}
 
 /**
  * Filter, sort, and paginate the weapon list based on the current selections
@@ -168,13 +202,30 @@ const useWeaponTableRows = ({
           upgradeLevel = Math.min(regularUpgradeLevel, weapon.attack.length - 1);
         }
 
-        let weaponAttackResult = getWeaponAttack({
+        const baseAttackResult = getWeaponAttack({
           weapon,
           attributes,
           twoHanding,
           upgradeLevel,
           disableTwoHandingAttackPowerBonus: regulationVersion.disableTwoHandingAttackPowerBonus,
           ineffectiveAttributePenalty: regulationVersion.ineffectiveAttributePenalty,
+        });
+
+        // Determine included damage types from the unweighted values so columns don't disappear when
+        // a weight is set to 0.
+        for (const type of allAttackPowerTypes) {
+          if (baseAttackResult.attackPower[type]) {
+            includedDamageTypes.add(type);
+          }
+        }
+
+        // We'll use this for sorting + display. In weighted mode we apply weights to attack power
+        // and spell scaling (but not status buildup).
+        let weaponAttackResult = applyDisplayWeights({
+          attackResult: baseAttackResult,
+          optimizeMode,
+          optimizationWeights,
+          spellScalingWeight,
         });
 
         let optimizedAttributes: Attributes | undefined;
@@ -193,14 +244,15 @@ const useWeaponTableRows = ({
             spellScalingWeight,
           });
 
-          weaponAttackResult = optimized.optimizedAttackResult;
+          // Use the optimized attack result. If we're in weighted mode, apply weights for display/sorting.
+          const optimizedAttackResult = optimized.optimizedAttackResult;
+          weaponAttackResult = applyDisplayWeights({
+            attackResult: optimizedAttackResult,
+            optimizeMode,
+            optimizationWeights,
+            spellScalingWeight,
+          });
           optimizedAttributes = optimized.optimizedAttributes;
-        }
-
-        for (const statusType of allAttackPowerTypes) {
-          if (weaponAttackResult.attackPower[statusType]) {
-            includedDamageTypes.add(statusType);
-          }
         }
 
         if (weapon.sorceryTool || weapon.incantationTool) {
