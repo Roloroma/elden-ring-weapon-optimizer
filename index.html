@@ -49,6 +49,7 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    <script type="module" src="%BASE_URL%src/index.tsx"></script>
+    <!-- Vite expects the entry module to be root-absolute; base is applied during build output. -->
+    <script type="module" src="/src/index.tsx"></script>
   </body>
 </html>
