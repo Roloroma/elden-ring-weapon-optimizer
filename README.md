@@ -1,14 +1,30 @@
 # Elden Ring Weapon Attack Optimizer
 
-A weapon calculator that allows comparing multiple weapons and infusions. Try it at [eldenring.tclark.io](https://eldenring.tclark.io/).
+A weapon optimizer that allows comparing multiple weapons and infusions, plus optimizing stat allocation with free stat points.
+
+Try it here: https://roloroma.github.io/elden-ring-weapon-optimizer/
+
+This project is a fork/mod of the original calculator by Tom Clark: https://eldenring.tclark.io/
 
 ![image](https://user-images.githubusercontent.com/3964980/233752758-8d2bf3b5-0c39-44c6-b861-a75cff93f44e.png)
 
 Enter your stats and your criteria (weapon type, affinity, etc). The app will list every weapon matching your selections, along with the attack rating and status buildup you'll get on your build. Click a column header to sort the table by that column.
 
+## Credits
+
+- Original calculator by Tom Clark (MIT licensed): https://eldenring.tclark.io/
+- This fork/mod by Roloroma: https://github.com/Roloroma/elden-ring-weapon-optimizer
+
+## Optimizer features
+
+- `Free Stat Points`: automatically distributes spare stat points for each weapon to maximize a chosen metric.
+- Optimization modes: Total Attack Power, Specific Attack Power, Status Buildup, Spell Scaling, Weighted.
+
 ## Contributing
 
 To start the server locally, run `yarn install && yarn start`.
+
+Report bugs / feature requests here: https://github.com/Roloroma/elden-ring-weapon-optimizer/issues
 
 ### Updating data
 
