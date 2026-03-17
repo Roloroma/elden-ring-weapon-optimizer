@@ -218,14 +218,9 @@ const useWeaponTableRows = ({
           }
         }
 
-        // We'll use this for sorting + display. In weighted mode we apply weights to attack power
-        // and spell scaling (but not status buildup).
-        let weaponAttackResult = applyDisplayWeights({
-          attackResult: baseAttackResult,
-          optimizeMode,
-          optimizationWeights,
-          showWeightedAttackPower,
-        });
+        // Store unweighted results in state. Weighting is applied later for display/sorting so
+        // toggling "Show weighted Attack Power" doesn't trigger a full recomputation/optimization.
+        let weaponAttackResult = baseAttackResult;
 
         let optimizedAttributes: Attributes | undefined;
         if (shouldOptimize) {
@@ -243,14 +238,7 @@ const useWeaponTableRows = ({
             spellScalingWeight,
           });
 
-          // Use the optimized attack result. If we're in weighted mode, apply weights for display/sorting.
-          const optimizedAttackResult = optimized.optimizedAttackResult;
-          weaponAttackResult = applyDisplayWeights({
-            attackResult: optimizedAttackResult,
-            optimizeMode,
-            optimizationWeights,
-            showWeightedAttackPower,
-          });
+          weaponAttackResult = optimized.optimizedAttackResult;
           optimizedAttributes = optimized.optimizedAttributes;
         }
 
@@ -303,13 +291,36 @@ const useWeaponTableRows = ({
     optimizeAttackPowerType,
     optimizationWeights,
     spellScalingWeight,
-    showWeightedAttackPower,
   ]);
+
+  const displayRows = useMemo<WeaponTableRowData[]>(() => {
+    if (filteredRows.length === 0) {
+      return filteredRows;
+    }
+
+    const weightedDisplayEnabled = optimizeMode === "weighted" && showWeightedAttackPower;
+    if (!weightedDisplayEnabled) {
+      return filteredRows;
+    }
+
+    return filteredRows.map((row) => {
+      const [weapon, attackResult, optimizationInfo] = row;
+      const weightedAttackResult = applyDisplayWeights({
+        attackResult,
+        optimizeMode,
+        optimizationWeights,
+        showWeightedAttackPower,
+      });
+      return optimizationInfo
+        ? ([weapon, weightedAttackResult, optimizationInfo] as WeaponTableRowData)
+        : ([weapon, weightedAttackResult] as WeaponTableRowData);
+    });
+  }, [filteredRows, optimizeMode, optimizationWeights, showWeightedAttackPower]);
 
   const rowGroups = useMemo<WeaponTableRowGroup[]>(() => {
     if (groupWeaponTypes) {
       const rowsByWeaponType: { [weaponType in WeaponType]?: WeaponTableRowData[] } = {};
-      filteredRows.forEach((row) => {
+      displayRows.forEach((row) => {
         const [weapon] = row;
         (rowsByWeaponType[weapon.weaponType] ??= []).push(row);
       });
@@ -327,15 +338,15 @@ const useWeaponTableRows = ({
       return rowGroups;
     }
 
-    return filteredRows.length
+    return displayRows.length
       ? [
           {
             key: "allWeapons",
-            rows: sortWeapons(filteredRows, sortBy, reverse).slice(offset, limit),
+            rows: sortWeapons(displayRows, sortBy, reverse).slice(offset, limit),
           },
         ]
       : [];
-  }, [filteredRows, reverse, sortBy, groupWeaponTypes, offset, limit]);
+  }, [displayRows, reverse, sortBy, groupWeaponTypes, offset, limit]);
 
   return {
     rowGroups,
