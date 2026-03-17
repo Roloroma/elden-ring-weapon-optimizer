@@ -1,4 +1,4 @@
-import { type ChangeEvent, type KeyboardEvent, useCallback, useState } from "react";
+import { type ChangeEvent, type KeyboardEvent, useCallback, useEffect, useState } from "react";
 import type { TextFieldProps } from "@mui/material";
 import { TextField } from "@mui/material";
 
@@ -24,6 +24,14 @@ export default function NumberTextField({
   ...props
 }: Props) {
   const [valueStr, setValueStr] = useState(value.toString());
+  const [focused, setFocused] = useState(false);
+
+  // Sync external updates (e.g. presets) into the text field without disrupting active typing.
+  useEffect(() => {
+    if (!focused) {
+      setValueStr(value.toString());
+    }
+  }, [focused, value]);
 
   const handleKeyDown = useCallback(
     (evt: KeyboardEvent<HTMLInputElement>) => {
@@ -90,6 +98,7 @@ export default function NumberTextField({
   );
 
   const handleBlur = useCallback(() => {
+    setFocused(false);
     setValueStr(value.toString());
   }, [value]);
 
@@ -97,6 +106,7 @@ export default function NumberTextField({
     <TextField
       {...props}
       inputProps={{ inputMode: "decimal" }}
+      onFocus={() => setFocused(true)}
       onKeyDown={handleKeyDown}
       onChange={handleChange}
       onBlur={handleBlur}
