@@ -69,12 +69,10 @@ function applyDisplayWeights({
   attackResult,
   optimizeMode,
   optimizationWeights,
-  spellScalingWeight,
 }: {
   attackResult: ReturnType<typeof getWeaponAttack>;
   optimizeMode: OptimizeMode;
   optimizationWeights: OptimizationWeights;
-  spellScalingWeight: number;
 }) {
   if (optimizeMode !== "weighted") {
     return attackResult;
@@ -86,15 +84,12 @@ function applyDisplayWeights({
     weightedAttackPower[type] = (weightedAttackPower[type] ?? 0) * weight;
   }
 
-  const weightedSpellScaling = { ...attackResult.spellScaling };
-  for (const [typeStr, value] of Object.entries(weightedSpellScaling)) {
-    weightedSpellScaling[+typeStr as AttackPowerType] = value * spellScalingWeight;
-  }
-
   return {
     ...attackResult,
     attackPower: weightedAttackPower,
-    spellScaling: weightedSpellScaling,
+    // Intentionally do not apply weighting to spell scaling in the table display/sorting.
+    // (Weighted mode uses a fixed, large spell scaling weight for optimization only.)
+    spellScaling: attackResult.spellScaling,
   };
 }
 
@@ -225,7 +220,6 @@ const useWeaponTableRows = ({
           attackResult: baseAttackResult,
           optimizeMode,
           optimizationWeights,
-          spellScalingWeight,
         });
 
         let optimizedAttributes: Attributes | undefined;
@@ -250,7 +244,6 @@ const useWeaponTableRows = ({
             attackResult: optimizedAttackResult,
             optimizeMode,
             optimizationWeights,
-            spellScalingWeight,
           });
           optimizedAttributes = optimized.optimizedAttributes;
         }

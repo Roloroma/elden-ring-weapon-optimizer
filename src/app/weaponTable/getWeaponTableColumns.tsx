@@ -280,11 +280,7 @@ export default function getWeaponTableColumns({
         sx: {
           width: 40 * splitSpellScalingColumns.length + 27,
         },
-        header: (
-          <Typography component="span" variant="subtitle2" sx={weightedHeaderSx}>
-            {weightedDisplay ? "Weighted Spell Scaling" : "Spell Scaling"}
-          </Typography>
-        ),
+        header: "Spell Scaling",
         columns: splitSpellScalingColumns,
       };
     } else {
@@ -293,18 +289,7 @@ export default function getWeaponTableColumns({
         sx: {
           width: 128,
         },
-        columns: [
-          weightedDisplay
-            ? {
-                ...spellScalingColumn,
-                header: (
-                  <Typography component="span" variant="subtitle2" sx={weightedHeaderSx}>
-                    Weighted Spell Scaling
-                  </Typography>
-                ),
-              }
-            : spellScalingColumn,
-        ],
+        columns: [spellScalingColumn],
       };
     }
   }
@@ -333,7 +318,7 @@ export default function getWeaponTableColumns({
             width: 40 * (allDamageTypes.length + 1) + 27,
           },
           header: (
-            <Typography component="span" variant="subtitle2" sx={weightedHeaderSx}>
+            <Typography component="span" variant="subtitle2" sx={weightedHeaderSx} role="columnheader">
               {weightedDisplay ? "Weighted Attack Power" : "Attack Power"}
             </Typography>
           ),

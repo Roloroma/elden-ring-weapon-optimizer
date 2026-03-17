@@ -373,9 +373,10 @@ function WeaponListSettings({
                 label="Spell Scaling"
                 size="small"
                 variant="outlined"
-                value={spellScalingWeight}
+                disabled
+                value={1000}
                 min={0}
-                max={100}
+                max={1000}
                 step={0.1}
                 onChange={(newValue) => onSpellScalingWeightChanged(newValue)}
               />

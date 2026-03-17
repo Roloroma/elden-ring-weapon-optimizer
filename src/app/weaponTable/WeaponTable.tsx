@@ -249,11 +249,14 @@ function WeaponTable({
                 key={key}
                 sx={[sx ?? {}, { alignItems: "center", justifyContent: "center" }]}
               >
-                {header && (
-                  <Typography component="span" variant="subtitle2" role="columnheader">
-                    {header}
-                  </Typography>
-                )}
+                {header &&
+                  (typeof header === "string" ? (
+                    <Typography component="span" variant="subtitle2" role="columnheader">
+                      {header}
+                    </Typography>
+                  ) : (
+                    header
+                  ))}
               </WeaponTableColumnGroup>
             ))}
           </WeaponTableColumnGroupHeaderRow>

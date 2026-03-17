@@ -96,7 +96,7 @@ const defaultAppState: AppState = {
   optimizeAttackPowerType: AttackPowerType.PHYSICAL,
   weightedBossPresetId: "custom",
   optimizationWeights: defaultWeights(),
-  spellScalingWeight: 1,
+  spellScalingWeight: 1000,
   showOptimizedAttributes: false,
   twoHanding: false,
   upgradeLevel: 25,
@@ -189,6 +189,10 @@ function getInitialAppState() {
     (appState as unknown as { weightedBossPresetId: WeightedBossPresetId }).weightedBossPresetId = "custom";
   }
 
+  // Spell scaling weight is intentionally fixed (see Weighted/Bosses UX) to avoid comparing
+  // staff/seal melee attack power vs spell scaling.
+  (appState as unknown as { spellScalingWeight: number }).spellScalingWeight = 1000;
+
   return appState;
 }
 
@@ -267,7 +271,12 @@ export default function useAppState() {
               optimizeAttackPowerType = AttackPowerType.BLEED;
             }
           }
-          return { ...prevAppState, optimizeMode, optimizeAttackPowerType };
+          return {
+            ...prevAppState,
+            optimizeMode,
+            optimizeAttackPowerType,
+            spellScalingWeight: 1000,
+          };
         });
       },
       setOptimizeAttackPowerType(optimizeAttackPowerType) {
@@ -276,7 +285,7 @@ export default function useAppState() {
       setWeightedBossPresetId(weightedBossPresetId) {
         setAppState((prevAppState) => {
           if (weightedBossPresetId === "custom") {
-            return { ...prevAppState, weightedBossPresetId };
+            return { ...prevAppState, weightedBossPresetId, spellScalingWeight: 1000 };
           }
 
           const preset = getWeightedBossPreset(weightedBossPresetId);
@@ -284,7 +293,7 @@ export default function useAppState() {
             ...prevAppState,
             weightedBossPresetId,
             optimizationWeights: { ...prevAppState.optimizationWeights, ...preset.weights },
-            spellScalingWeight: preset.spellScalingWeight,
+            spellScalingWeight: 1000,
           };
         });
       },
@@ -299,7 +308,7 @@ export default function useAppState() {
         setAppState((prevAppState) => ({
           ...prevAppState,
           weightedBossPresetId: "custom",
-          spellScalingWeight,
+          spellScalingWeight: 1000,
         }));
       },
       setShowOptimizedAttributes(showOptimizedAttributes) {
