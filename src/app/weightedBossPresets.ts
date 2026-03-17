@@ -52,7 +52,7 @@ export const weightedBossPresets: readonly WeightedBossPreset[] = [
     id: "custom",
     label: "Custom",
     weights: {},
-    spellScalingWeight: 1000,
+    spellScalingWeight: 1,
   },
   {
     id: "default",
@@ -71,7 +71,7 @@ export const weightedBossPresets: readonly WeightedBossPreset[] = [
       madness: 0,
       deathBlight: 0,
     }),
-    spellScalingWeight: 1000,
+    spellScalingWeight: 0,
   },
   {
     id: "godrick",
@@ -90,7 +90,7 @@ export const weightedBossPresets: readonly WeightedBossPreset[] = [
       madness: 0,
       deathBlight: 0,
     }),
-    spellScalingWeight: 1000,
+    spellScalingWeight: 0,
   },
   {
     id: "radahn",
@@ -109,7 +109,7 @@ export const weightedBossPresets: readonly WeightedBossPreset[] = [
       madness: 0,
       deathBlight: 0,
     }),
-    spellScalingWeight: 1000,
+    spellScalingWeight: 0,
   },
   {
     id: "renalla",
@@ -128,7 +128,7 @@ export const weightedBossPresets: readonly WeightedBossPreset[] = [
       madness: 0,
       deathBlight: 0,
     }),
-    spellScalingWeight: 1000,
+    spellScalingWeight: 0,
   },
   {
     id: "rykard",
@@ -147,7 +147,7 @@ export const weightedBossPresets: readonly WeightedBossPreset[] = [
       madness: 0,
       deathBlight: 0,
     }),
-    spellScalingWeight: 1000,
+    spellScalingWeight: 0,
   },
   {
     id: "morgott",
@@ -166,7 +166,7 @@ export const weightedBossPresets: readonly WeightedBossPreset[] = [
       madness: 0,
       deathBlight: 0,
     }),
-    spellScalingWeight: 1000,
+    spellScalingWeight: 0,
   },
   {
     id: "mohg",
@@ -185,7 +185,7 @@ export const weightedBossPresets: readonly WeightedBossPreset[] = [
       madness: 0,
       deathBlight: 0,
     }),
-    spellScalingWeight: 1000,
+    spellScalingWeight: 0,
   },
   {
     id: "malenia",
@@ -204,7 +204,7 @@ export const weightedBossPresets: readonly WeightedBossPreset[] = [
       madness: 0,
       deathBlight: 0,
     }),
-    spellScalingWeight: 1000,
+    spellScalingWeight: 0,
   },
 ] as const;
 

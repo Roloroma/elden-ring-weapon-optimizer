@@ -280,7 +280,11 @@ export default function getWeaponTableColumns({
         sx: {
           width: 40 * splitSpellScalingColumns.length + 27,
         },
-        header: "Spell Scaling",
+        header: (
+          <Typography component="span" variant="subtitle2" sx={weightedHeaderSx} role="columnheader">
+            {weightedDisplay ? "Weighted Spell Scaling" : "Spell Scaling"}
+          </Typography>
+        ),
         columns: splitSpellScalingColumns,
       };
     } else {
@@ -289,7 +293,18 @@ export default function getWeaponTableColumns({
         sx: {
           width: 128,
         },
-        columns: [spellScalingColumn],
+        columns: [
+          weightedDisplay
+            ? {
+                ...spellScalingColumn,
+                header: (
+                  <Typography component="span" variant="subtitle2" sx={weightedHeaderSx}>
+                    Weighted Spell Scaling
+                  </Typography>
+                ),
+              }
+            : spellScalingColumn,
+        ],
       };
     }
   }

@@ -373,8 +373,7 @@ function WeaponListSettings({
                 label="Spell Scaling"
                 size="small"
                 variant="outlined"
-                disabled
-                value={1000}
+                value={spellScalingWeight}
                 min={0}
                 max={1000}
                 step={0.1}
