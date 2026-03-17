@@ -28,6 +28,9 @@ yarn-error.log*
 *scratch*.ts
 buildData.env
 
+# local artifact (not part of the app)
+public/favicon16x16.png
+
 .pnp.*
 .yarn/*
 !.yarn/patches
