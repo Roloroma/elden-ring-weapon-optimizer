@@ -93,7 +93,9 @@ const useWeaponTableRows = ({
   const optimizeAttackPowerType = useDeferredValue(options.optimizeAttackPowerType);
   const optimizationWeights = useDeferredValue(options.optimizationWeights);
   const spellScalingWeight = useDeferredValue(options.spellScalingWeight);
-  const showOptimizedAttributes = useDeferredValue(options.showOptimizedAttributes);
+  // Note: showOptimizedAttributes only controls UI columns. We always compute/store optimized
+  // attributes when optimizing so toggling the checkbox does not trigger a full recomputation.
+  // (The optimization results are the same either way.)
 
   const specialUpgradeLevel = toSpecialUpgradeLevel(regularUpgradeLevel);
 
@@ -192,9 +194,7 @@ const useWeaponTableRows = ({
           });
 
           weaponAttackResult = optimized.optimizedAttackResult;
-          if (showOptimizedAttributes) {
-            optimizedAttributes = optimized.optimizedAttributes;
-          }
+          optimizedAttributes = optimized.optimizedAttributes;
         }
 
         for (const statusType of allAttackPowerTypes) {
@@ -252,7 +252,6 @@ const useWeaponTableRows = ({
     optimizeAttackPowerType,
     optimizationWeights,
     spellScalingWeight,
-    showOptimizedAttributes,
   ]);
 
   const rowGroups = useMemo<WeaponTableRowGroup[]>(() => {
