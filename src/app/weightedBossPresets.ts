@@ -3,6 +3,7 @@ import type { OptimizationWeights } from "../calculator/optimization.ts";
 
 export type WeightedBossPresetId =
   | "custom"
+  | "default"
   | "godrick"
   | "radahn"
   | "renalla"
@@ -52,6 +53,25 @@ export const weightedBossPresets: readonly WeightedBossPreset[] = [
     label: "Custom",
     weights: {},
     spellScalingWeight: 1,
+  },
+  {
+    id: "default",
+    label: "Default",
+    weights: makeWeights({
+      physical: 1,
+      magic: 1,
+      fire: 1,
+      lightning: 1,
+      holy: 1,
+      poison: 20 / 500,
+      scarletRot: 20 / 500,
+      bleed: 20 / 500,
+      frost: 20 / 500,
+      sleep: 20 / 500,
+      madness: 0,
+      deathBlight: 0,
+    }),
+    spellScalingWeight: 0,
   },
   {
     id: "godrick",
