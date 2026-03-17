@@ -156,7 +156,18 @@ function getInitialAppState() {
     }
   }
 
-  const regulationVersionName = window.location.pathname.substring(1);
+  // The original app encodes the regulation version in the pathname (e.g. "/v1.14").
+  // When hosted under a subpath (GitHub Pages), strip the base path first.
+  const baseUrl = import.meta.env.BASE_URL ?? "/";
+  const baseNoTrailing = baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
+  const pathname = window.location.pathname;
+  const withoutBase = pathname.startsWith(baseNoTrailing + "/")
+    ? pathname.slice((baseNoTrailing + "/").length)
+    : pathname.startsWith(baseNoTrailing)
+      ? pathname.slice(baseNoTrailing.length).replace(/^\//, "")
+      : pathname.replace(/^\//, "");
+
+  const regulationVersionName = withoutBase;
   if (regulationVersionName && regulationVersionName in regulationVersions) {
     appState.regulationVersionName = regulationVersionName as RegulationVersionName;
   }
@@ -172,10 +183,14 @@ function onAppStateChanged(appState: AppState) {
 }
 
 function updateUrl(regulationVersionName: RegulationVersionName) {
+  const baseUrl = import.meta.env.BASE_URL ?? "/";
+  const base = baseUrl.endsWith("/") ? baseUrl : baseUrl + "/";
+  const suffix = regulationVersionName === "latest" ? "" : regulationVersionName;
+
   window.history.replaceState(
     null,
     "",
-    `/${regulationVersionName === "latest" ? "" : regulationVersionName}`,
+    `${base}${suffix}`,
   );
 }
 
