@@ -233,6 +233,7 @@ export default function App() {
         footer={tableFooter}
         sortBy={sortBy}
         reverse={reverse}
+        weightedDisplay={optimizeMode === "weighted"}
         splitDamage={splitDamage}
         splitSpellScaling={!!regulationVersion.splitSpellScaling}
         numericalScaling={numericalScaling}

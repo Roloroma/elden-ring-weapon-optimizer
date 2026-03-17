@@ -253,6 +253,7 @@ interface WeaponTableColumnsOptions {
   showOptimizedAttributes: boolean;
   attackPowerTypes: ReadonlySet<AttackPowerType>;
   spellScaling: boolean;
+  weightedDisplay: boolean;
 }
 
 export default function getWeaponTableColumns({
@@ -262,7 +263,11 @@ export default function getWeaponTableColumns({
   showOptimizedAttributes,
   attackPowerTypes,
   spellScaling,
+  weightedDisplay,
 }: WeaponTableColumnsOptions): WeaponTableColumnGroupDef[] {
+  const weightedHeaderColor = "rgb(245, 189, 99)";
+  const weightedHeaderSx = weightedDisplay ? { color: weightedHeaderColor } : undefined;
+
   const includedStatusTypes = allStatusTypes.filter((statusType) =>
     attackPowerTypes.has(statusType),
   );
@@ -275,7 +280,11 @@ export default function getWeaponTableColumns({
         sx: {
           width: 40 * splitSpellScalingColumns.length + 27,
         },
-        header: "Spell Scaling",
+        header: (
+          <Typography component="span" variant="subtitle2" sx={weightedHeaderSx}>
+            {weightedDisplay ? "Weighted Spell Scaling" : "Spell Scaling"}
+          </Typography>
+        ),
         columns: splitSpellScalingColumns,
       };
     } else {
@@ -284,7 +293,18 @@ export default function getWeaponTableColumns({
         sx: {
           width: 128,
         },
-        columns: [spellScalingColumn],
+        columns: [
+          weightedDisplay
+            ? {
+                ...spellScalingColumn,
+                header: (
+                  <Typography component="span" variant="subtitle2" sx={weightedHeaderSx}>
+                    Weighted Spell Scaling
+                  </Typography>
+                ),
+              }
+            : spellScalingColumn,
+        ],
       };
     }
   }
@@ -312,7 +332,11 @@ export default function getWeaponTableColumns({
           sx: {
             width: 40 * (allDamageTypes.length + 1) + 27,
           },
-          header: "Attack Power",
+          header: (
+            <Typography component="span" variant="subtitle2" sx={weightedHeaderSx}>
+              {weightedDisplay ? "Weighted Attack Power" : "Attack Power"}
+            </Typography>
+          ),
           columns: [
             ...allDamageTypes.map((damageType) => attackColumns[damageType]),
             totalSplitAttackPowerColumn,
@@ -323,7 +347,18 @@ export default function getWeaponTableColumns({
           sx: {
             width: 128,
           },
-          columns: [totalAttackPowerColumn],
+          columns: [
+            weightedDisplay
+              ? {
+                  ...totalAttackPowerColumn,
+                  header: (
+                    <Typography component="span" variant="subtitle2" sx={weightedHeaderSx}>
+                      Weighted Attack Power
+                    </Typography>
+                  ),
+                }
+              : totalAttackPowerColumn,
+          ],
         },
     ...(includedStatusTypes.length > 0
       ? [

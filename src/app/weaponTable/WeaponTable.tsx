@@ -43,7 +43,7 @@ export interface WeaponTableColumnDef {
 
 export interface WeaponTableColumnGroupDef {
   key: string;
-  header?: string;
+  header?: ReactNode;
   columns: readonly WeaponTableColumnDef[];
   sx?: SystemStyleObject<Theme> | ((theme: Theme) => SystemStyleObject<Theme>);
 }
@@ -54,6 +54,7 @@ interface Props {
   footer?: ReactNode;
   sortBy: SortBy;
   reverse: boolean;
+  weightedDisplay: boolean;
 
   /**
    * If true, include columns for each individual damage type as well as total attack power
@@ -206,6 +207,7 @@ function WeaponTable({
   footer,
   sortBy,
   reverse,
+  weightedDisplay,
   splitDamage,
   splitSpellScaling,
   numericalScaling,
@@ -224,8 +226,17 @@ function WeaponTable({
         showOptimizedAttributes,
         attackPowerTypes,
         spellScaling,
+        weightedDisplay,
       }),
-    [splitDamage, splitSpellScaling, numericalScaling, showOptimizedAttributes, attackPowerTypes, spellScaling],
+    [
+      splitDamage,
+      splitSpellScaling,
+      numericalScaling,
+      showOptimizedAttributes,
+      attackPowerTypes,
+      spellScaling,
+      weightedDisplay,
+    ],
   );
 
   return (
