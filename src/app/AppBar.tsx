@@ -28,7 +28,7 @@ function AppBar({ menuOpen, onMenuOpenChanged }: Props) {
       </IconButton>
 
       <Typography variant="h1" component="span" sx={{ flexGrow: 1 }}>
-        Elden&nbsp;Ring Weapon&nbsp;Calculator
+        Elden&nbsp;Ring Weapon&nbsp;Optimizer
       </Typography>
 
       <IconButton
@@ -36,7 +36,7 @@ function AppBar({ menuOpen, onMenuOpenChanged }: Props) {
         color="inherit"
         edge="end"
         aria-label="GitHub Repository"
-        href="https://github.com/ThomasJClark/elden-ring-weapon-calculator"
+        href="https://github.com/Roloroma/elden-ring-weapon-optimizer"
         target="_blank"
         rel="noopener noreferrer"
       >

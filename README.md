@@ -1,4 +1,4 @@
-# Elden Ring Weapon Attack Calculator
+# Elden Ring Weapon Attack Optimizer
 
 A weapon calculator that allows comparing multiple weapons and infusions. Try it at [eldenring.tclark.io](https://eldenring.tclark.io/).
 

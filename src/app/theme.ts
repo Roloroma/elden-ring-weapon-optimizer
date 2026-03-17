@@ -10,7 +10,7 @@ const fontDefinition = [
     fontStyle: "normal",
     fontWeight: 500,
     fontDisplay: "swap",
-    src: `url(/prompt-v10-latin-medium.woff2) format("woff2")`,
+    src: `url(${import.meta.env.BASE_URL}prompt-v10-latin-medium.woff2) format("woff2")`,
   },
 ];
 
@@ -42,14 +42,14 @@ export default createTheme({
       primary: "#fff",
     },
     primary: {
-      main: "#ffb452",
+      main: "#7fb8ff",
     },
     secondary: {
-      main: "#cf8563",
+      main: "#6aa5c8",
     },
     background: {
-      paper: "#353328",
-      default: "#0e120e",
+      paper: "#1e2835",
+      default: "#090c12",
     },
   },
   typography,
@@ -57,7 +57,7 @@ export default createTheme({
     MuiPaper: {
       styleOverrides: {
         root: {
-          backgroundImage: `linear-gradient(to bottom, #624c2c 0%, #624c2c 100%)`,
+          backgroundImage: `linear-gradient(to bottom, #233246 0%, #233246 100%)`,
         },
       },
     },
@@ -69,31 +69,31 @@ export default createTheme({
           backgroundImage: `
             radial-gradient(
               circle at 50% 50%,
-              ${alpha("#251b11", 0)} 0%,
-              ${alpha("#251b11", 0)} 60%,
-              ${alpha("#251b11", 0.2)} 80%,
-              ${alpha("#251b11", 0.6)} 100%
+              ${alpha("#081221", 0)} 0%,
+              ${alpha("#081221", 0)} 60%,
+              ${alpha("#081221", 0.2)} 80%,
+              ${alpha("#081221", 0.6)} 100%
             ),
             linear-gradient(
               to right,
-              ${alpha("#402f25", 0.3)} 0%,
-              ${alpha("#402f25", 0)} 20%,
-              ${alpha("#402f25", 0)} 80%,
-              ${alpha("#402f25", 0.3)} 100%
+              ${alpha("#1a2b3d", 0.3)} 0%,
+              ${alpha("#1a2b3d", 0)} 20%,
+              ${alpha("#1a2b3d", 0)} 80%,
+              ${alpha("#1a2b3d", 0.3)} 100%
               ),
             url(${backgroundStars}),
             linear-gradient(
               to top,
-              #120a04 0%,
-              #2e1f15 40%,
-              #43342a 80%,
-              #4c432f 100%
+              #05070f 0%,
+              #0b1422 40%,
+              #132439 80%,
+              #1c2b3e 100%
             )`,
           backgroundAttachment: "fixed",
         },
         "::selection": {
-          backgroundColor: "#ffb452",
-          color: "#3c3122",
+          backgroundColor: "#7fb8ff",
+          color: "#132439",
         },
       },
     },
